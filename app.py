@@ -319,21 +319,21 @@ def dashboard() -> str:
             <section id="queries" class="section">
                 <div class="section-title">
                     <div>
-                        <p class="eyebrow">A-level query coverage</p>
-                        <h2>What the Demo Surfaces</h2>
+                        <p class="eyebrow">Query-to-page map</p>
+                        <h2>How SQL Results Appear in the Dashboard</h2>
                     </div>
-                    <p>The interface presents more than eight non-trivial SQL views using joins, grouping, aggregation, and computed balances.</p>
+                    <p>Each item below starts with what the query calculates, then points to where that result is shown on the web page.</p>
                 </div>
                 <ol class="query-list">
-                    <li>Current occupied room count</li>
-                    <li>Occupancy rate by building and wing</li>
-                    <li>Room inventory and capacity by category</li>
-                    <li>Reservation demand by requested category</li>
-                    <li>Total charges, payments, and outstanding balance by billed party</li>
-                    <li>Revenue grouped by service or charge category</li>
-                    <li>Deposit status totals</li>
-                    <li>Event room usage with expected attendance</li>
-                    <li>Current guest location/contact snapshot</li>
+                    <li><strong>Occupied room count:</strong> shown in the Occupied Now KPI card.</li>
+                    <li><strong>Occupancy by wing:</strong> shown in the Aqua, Lagoon, and Palm wing cards.</li>
+                    <li><strong>Room capacity by category:</strong> shown in the Room Inventory Mix table.</li>
+                    <li><strong>Reservation demand:</strong> shown in the Reservation Demand table.</li>
+                    <li><strong>Charges, payments, and balances:</strong> shown in the Outstanding Balance by Billed Party table.</li>
+                    <li><strong>Revenue by category:</strong> shown in the Revenue Categories bar chart.</li>
+                    <li><strong>Deposit status totals:</strong> shown in the Deposit Status table.</li>
+                    <li><strong>Event room usage:</strong> shown in the Event Room Usage table.</li>
+                    <li><strong>Guest location snapshot:</strong> shown in the Guest Contact Snapshot table.</li>
                 </ol>
             </section>
         </main>
