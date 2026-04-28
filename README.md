@@ -1,0 +1,1 @@
+In case the ERD pdf file we uploaded is not readable (a bit blurry), please use this link for reference in Lucid App: https://lucid.app/lucidchart/4afb14dd-35d2-4ea2-93f0-2162eae77da3/edit?viewport_loc=-313%2C-529%2C3677%2C2070%2C0_0&invitationId=inv_9ba65e92-646e-4f31-9235-15126ef98f9b
