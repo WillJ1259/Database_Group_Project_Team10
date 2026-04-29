@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Rooms | Last Resort Data Portal{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <p class="eyebrow">Room availability</p>
+    <h2>Find Rooms That Match Guest Needs</h2>
+    <p>Use the filters to search rooms by category, capacity, rate, pool proximity, and accessibility. Flask passes these values into a parameterized SQLite query.</p>
+</section>
+
+<form class="filter-panel" method="get" action="{{ url_for('rooms') }}">
+    <label>
+        Room category
+        <select name="room_category">
+            <option value="">Any category</option>
+            {% for category in room_categories %}
+            <option value="{{ category }}" {% if room_filters.room_category == category %}selected{% endif %}>{{ category|title }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>
+        Minimum sleeping capacity
+        <input type="number" min="0" name="min_sleep" value="{{ room_filters.min_sleep }}">
+    </label>
+    <label>
+        Minimum meeting capacity
+        <input type="number" min="0" name="min_meeting" value="{{ room_filters.min_meeting }}">
+    </label>
+    <label>
+        Maximum daily rate
+        <input type="number" min="0" name="max_rate" value="{{ room_filters.max_rate }}">
+    </label>
+    <label class="check-row">
+        <input type="checkbox" name="near_pool" value="1" {% if room_filters.near_pool == "1" %}checked{% endif %}>
+        Near pool
+    </label>
+    <label class="check-row">
+        <input type="checkbox" name="accessible" value="1" {% if room_filters.accessible == "1" %}checked{% endif %}>
+        Accessible wing
+    </label>
+    <div class="form-actions">
+        <button type="submit">Search rooms</button>
+        <a href="{{ url_for('rooms') }}">Reset</a>
+    </div>
+</form>
+
+<article class="panel">
+    <div class="panel-heading">
+        <h3>Matching Rooms</h3>
+        <span>{{ rooms|length }} result{{ '' if rooms|length == 1 else 's' }}</span>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Room</th>
+                    <th>Location</th>
+                    <th>Category</th>
+                    <th>Sleep</th>
+                    <th>Meeting</th>
+                    <th>Rate</th>
+                    <th>Pool</th>
+                    <th>Access</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rooms %}
+                <tr>
+                    <td>{{ row.roomNumberOnFloor }}</td>
+                    <td>{{ row.buildingName }}, {{ row.wingCode }} floor {{ row.floorNumber }}</td>
+                    <td>{{ row.roomCategory }}</td>
+                    <td>{{ row.maxSleepingCapacity }}</td>
+                    <td>{{ row.maxMeetingCapacity }}</td>
+                    <td>{{ row.baseDailyRate|money }}</td>
+                    <td>{{ row.nearPool }}</td>
+                    <td>{{ row.accessible }}</td>
+                    <td><span class="status {{ row.currentStatus|lower }}">{{ row.currentStatus }}</span></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="9">No rooms match those filters.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</article>
+{% endblock %}

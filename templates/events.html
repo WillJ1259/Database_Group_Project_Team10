@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Events | Last Resort Data Portal{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <p class="eyebrow">Event coordination</p>
+    <h2>Search Meeting Room Usage</h2>
+    <p>Filter scheduled events by date range and expected attendance to review facility demand.</p>
+</section>
+
+<form class="filter-panel" method="get" action="{{ url_for('events') }}">
+    <label>
+        Start date
+        <input type="date" name="event_start" value="{{ event_filters.event_start }}">
+    </label>
+    <label>
+        End date
+        <input type="date" name="event_end" value="{{ event_filters.event_end }}">
+    </label>
+    <label>
+        Minimum attendance
+        <input type="number" min="0" name="min_attendance" value="{{ event_filters.min_attendance }}">
+    </label>
+    <div class="form-actions">
+        <button type="submit">Search events</button>
+        <a href="{{ url_for('events') }}">Reset</a>
+    </div>
+</form>
+
+<article class="panel">
+    <div class="panel-heading">
+        <h3>Event Schedule and Assigned Rooms</h3>
+        <span>{{ events|length }} result{{ '' if events|length == 1 else 's' }}</span>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Attendance</th>
+                    <th>Guests</th>
+                    <th>Assigned Rooms</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in events %}
+                <tr>
+                    <td>{{ row.eventName }}</td>
+                    <td>{{ row.eventDate }}</td>
+                    <td>{{ row.startTime }} - {{ row.endTime }}</td>
+                    <td>{{ row.estimatedAttendance }}</td>
+                    <td>{{ row.estimatedGuestCount }}</td>
+                    <td>{{ row.assignedRooms }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6">No events match those filters.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</article>
+{% endblock %}

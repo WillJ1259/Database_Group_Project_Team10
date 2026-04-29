@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Guests | Last Resort Data Portal{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <p class="eyebrow">Guest coordination</p>
+    <h2>Locate Guests and Affiliations</h2>
+    <p>Search by guest or organization name, then optionally limit the result to guests currently checked in.</p>
+</section>
+
+<form class="filter-panel compact" method="get" action="{{ url_for('guests') }}">
+    <label>
+        Guest or organization contains
+        <input type="search" name="guest_search" value="{{ guest_filters.guest_search }}" placeholder="Example: NeuroLink">
+    </label>
+    <label class="check-row">
+        <input type="checkbox" name="only_checked_in" value="1" {% if guest_filters.only_checked_in == "1" %}checked{% endif %}>
+        Currently checked in only
+    </label>
+    <div class="form-actions">
+        <button type="submit">Search guests</button>
+        <a href="{{ url_for('guests') }}">Reset</a>
+    </div>
+</form>
+
+<article class="panel">
+    <div class="panel-heading">
+        <h3>Guest Contact Snapshot</h3>
+        <span>{{ guests|length }} result{{ '' if guests|length == 1 else 's' }}</span>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Guest</th>
+                    <th>Affiliation</th>
+                    <th>Status</th>
+                    <th>Current Room</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in guests %}
+                <tr>
+                    <td>{{ row.guestName }}</td>
+                    <td>{{ row.affiliation }}</td>
+                    <td>{{ row.stayStatus }}</td>
+                    <td>{{ row.currentRoom }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4">No guests match those filters.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</article>
+{% endblock %}

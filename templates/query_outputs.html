@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Query Outputs | Last Resort Data Portal{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <p class="eyebrow">SQL file coverage</p>
+    <h2>Original Query Outputs</h2>
+    <p>This page shows the eight outputs from <code>last_resort_queries.sql</code> so the demo clearly covers the required query set.</p>
+</section>
+
+<section class="query-output-grid">
+    <article class="panel">
+        <div class="panel-heading"><h3>Q1 Current Occupied Rooms</h3><span>KPI source</span></div>
+        <div class="table-wrap">
+            <table class="compact-table">
+                <thead><tr><th>Occupied Rooms</th></tr></thead>
+                <tbody>{% for row in outputs.q1 %}<tr><td>{{ row.occupied_rooms }}</td></tr>{% endfor %}</tbody>
+            </table>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-heading"><h3>Q2 Occupancy by Wing</h3><span>Capacity source</span></div>
+        <div class="table-wrap">
+            <table class="compact-table">
+                <thead><tr><th>Wing</th><th>Occupied Rooms</th></tr></thead>
+                <tbody>{% for row in outputs.q2 %}<tr><td>{{ row.wingCode }}</td><td>{{ row.occupied_room_count }}</td></tr>{% endfor %}</tbody>
+            </table>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-heading"><h3>Q3 Reservation Demand</h3><span>Requests</span></div>
+        <div class="table-wrap">
+            <table class="compact-table">
+                <thead><tr><th>Category</th><th>Requests</th></tr></thead>
+                <tbody>{% for row in outputs.q3 %}<tr><td>{{ row.requestedRoomCategory }}</td><td>{{ row.total_requests }}</td></tr>{% endfor %}</tbody>
+            </table>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-heading"><h3>Q4 Charges by Billed Party</h3><span>Billing source</span></div>
+        <div class="table-wrap">
+            <table class="compact-table">
+                <thead><tr><th>ID</th><th>Billed Party</th><th>Charges</th></tr></thead>
+                <tbody>{% for row in outputs.q4 %}<tr><td>{{ row.billedPartyId }}</td><td>{{ row.billed_party_name }}</td><td>{{ row.total_charges|money }}</td></tr>{% endfor %}</tbody>
+            </table>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-heading"><h3>Q5 Payments by Billed Party</h3><span>Billing source</span></div>
+        <div class="table-wrap">
+            <table class="compact-table">
+                <thead><tr><th>ID</th><th>Billed Party</th><th>Payments</th></tr></thead>
+                <tbody>{% for row in outputs.q5 %}<tr><td>{{ row.billedPartyId }}</td><td>{{ row.billed_party_name }}</td><td>{{ row.total_payments|money }}</td></tr>{% endfor %}</tbody>
+            </table>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-heading"><h3>Q6 Outstanding Balances</h3><span>Computed balance</span></div>
+        <div class="table-wrap">
+            <table class="compact-table">
+                <thead><tr><th>ID</th><th>Billed Party</th><th>Charges</th><th>Payments</th><th>Outstanding</th></tr></thead>
+                <tbody>{% for row in outputs.q6 %}<tr><td>{{ row.billedPartyId }}</td><td>{{ row.billed_party_name }}</td><td>{{ row.total_charges|money }}</td><td>{{ row.total_payments|money }}</td><td>{{ row.outstanding_balance|money }}</td></tr>{% endfor %}</tbody>
+            </table>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-heading"><h3>Q7 Revenue by Service Category</h3><span>Revenue source</span></div>
+        <div class="table-wrap">
+            <table class="compact-table">
+                <thead><tr><th>Service Category</th><th>Revenue</th></tr></thead>
+                <tbody>{% for row in outputs.q7 %}<tr><td>{{ row.serviceCategory }}</td><td>{{ row.total_service_revenue|money }}</td></tr>{% endfor %}</tbody>
+            </table>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-heading"><h3>Q8 Event Room Usage</h3><span>Coordination source</span></div>
+        <div class="table-wrap">
+            <table class="compact-table">
+                <thead><tr><th>Event</th><th>Rooms Booked</th><th>Expected Attendance</th></tr></thead>
+                <tbody>{% for row in outputs.q8 %}<tr><td>{{ row.eventName }}</td><td>{{ row.rooms_booked }}</td><td>{{ row.total_expected_attendance }}</td></tr>{% endfor %}</tbody>
+            </table>
+        </div>
+    </article>
+</section>
+
+<section class="section">
+    <div class="section-title">
+        <div>
+            <p class="eyebrow">Where these appear</p>
+            <h2>Query-to-Page Map</h2>
+        </div>
+        <p>The portal pages expand these outputs with filters and staff-facing presentation.</p>
+    </div>
+    <div class="mapping-grid">
+        <article><strong>Q1 and Q2</strong><span>Overview KPI cards and wing occupancy cards.</span></article>
+        <article><strong>Q3</strong><span>Overview Reservation Demand table.</span></article>
+        <article><strong>Q4, Q5, and Q6</strong><span>Billing page balance table.</span></article>
+        <article><strong>Q7</strong><span>Billing page revenue summary.</span></article>
+        <article><strong>Q8</strong><span>Events page event room usage table.</span></article>
+        <article><strong>Extra interactive views</strong><span>Rooms and Guests pages use additional parameterized queries.</span></article>
+    </div>
+</section>
+{% endblock %}

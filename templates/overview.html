@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Overview | Last Resort Data Portal{% endblock %}
+
+{% block content %}
+<section class="hero-panel">
+    <div class="hero-copy">
+        <p class="eyebrow">Azure Sands Resort & Spa</p>
+        <h2>Operational summaries powered by live database queries.</h2>
+        <p>The portal turns the project database into role-focused pages for capacity planning, billing accountability, event coordination, and guest lookup.</p>
+    </div>
+    <div class="kpi-grid">
+        <article><span>Total Rooms</span><strong>{{ metrics.total_rooms|number }}</strong></article>
+        <article><span>Occupied Now</span><strong>{{ metrics.occupied_rooms|number }}</strong></article>
+        <article><span>Occupancy</span><strong>{{ metrics.occupancy_rate|pct }}</strong></article>
+        <article><span>Outstanding</span><strong>{{ metrics.outstanding|money }}</strong></article>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-title">
+        <div>
+            <p class="eyebrow">Current capacity</p>
+            <h2>Wing Occupancy Snapshot</h2>
+        </div>
+        <p>These cards summarize current room assignments by wing so staff can quickly understand where the hotel is full.</p>
+    </div>
+    <div class="mini-grid">
+        {% for row in occupancy %}
+        <article class="mini-card">
+            <div>
+                <span class="eyebrow">{{ row.buildingName }}</span>
+                <h3>{{ row.wingCode }} Wing</h3>
+            </div>
+            <p class="big">{{ row.occupied_count|number }}/{{ row.room_count|number }}</p>
+            <div class="meter"><span style="width: {{ row.occupancy_percent or 0 }}%"></span></div>
+            <small>{{ row.occupancy_percent|pct }} occupied</small>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section split-layout">
+    <article class="panel">
+        <div class="panel-heading">
+            <h3>Room Inventory Mix</h3>
+            <span>Capacity by category</span>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Rooms</th>
+                        <th>Sleep Cap.</th>
+                        <th>Meeting Cap.</th>
+                        <th>Avg. Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in inventory %}
+                    <tr>
+                        <td>{{ row.roomCategory }}</td>
+                        <td>{{ row.roomCount }}</td>
+                        <td>{{ row.sleepingCapacity }}</td>
+                        <td>{{ row.meetingCapacity }}</td>
+                        <td>{{ row.averageRate|money }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-heading">
+            <h3>Reservation Demand</h3>
+            <span>Requests by type</span>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Requested Category</th>
+                        <th>Requests</th>
+                        <th>Sleep Cap.</th>
+                        <th>Meeting Cap.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in demand %}
+                    <tr>
+                        <td>{{ row.requestedRoomCategory }}</td>
+                        <td>{{ row.totalRequests }}</td>
+                        <td>{{ row.requestedSleepingCapacity }}</td>
+                        <td>{{ row.requestedMeetingCapacity }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+</section>
+
+<section class="section">
+    <div class="section-title">
+        <div>
+            <p class="eyebrow">Portal sections</p>
+            <h2>Choose a Workflow</h2>
+        </div>
+        <p>Each page focuses on one staff task and includes filters that become parameters in SQLite queries.</p>
+    </div>
+    <div class="workflow-grid">
+        <a href="{{ url_for('rooms') }}"><strong>Rooms</strong><span>Find rooms by capacity, type, rate, accessibility, and location.</span></a>
+        <a href="{{ url_for('billing') }}"><strong>Billing</strong><span>Search billed parties and review balances, charges, payments, deposits, and revenue.</span></a>
+        <a href="{{ url_for('events') }}"><strong>Events</strong><span>Filter scheduled events by date range and expected attendance.</span></a>
+        <a href="{{ url_for('guests') }}"><strong>Guests</strong><span>Locate guests and organizations, including current room assignment.</span></a>
+        <a href="{{ url_for('query_outputs') }}"><strong>Query Outputs</strong><span>Show the original eight SQL-file query outputs for grading and presentation.</span></a>
+    </div>
+</section>
+{% endblock %}
